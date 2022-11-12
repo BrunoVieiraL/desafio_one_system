@@ -3,20 +3,19 @@ import '../model/info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// ignore: must_be_immutable
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   TextEditingController companyController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-
-  Rx<List<InfoModel>> list = Rx<List<InfoModel>>([]);
-  Rx<int> length = 0.obs;
+  Rx<List<InfoModel>> companyList = Rx<List<InfoModel>>(ListMocks.companyList);
+  Rx<int> length = Rx<int>(0);
 
   @override
   Widget build(BuildContext context) {
-    list.value = ListMocks.companyList;
-    length.value = list.value.length;
+    length.value = companyList.value.length;
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -59,31 +58,43 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextField(
-                      controller: idController,
-                      onChanged: (value) {
-                        for (var i = 0; i < list.value.length; i++) {
-                          idController.text == list.value[i].id.toString()
-                              ? companyController.text = list.value.elementAt(i).name
-                              : '';
-                        }
-                      },
-                      decoration: const InputDecoration(
-                        constraints: BoxConstraints(maxWidth: 90),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: TextField(
+                        controller: idController,
+                        onChanged: (value) {
+                          for (var i = 0; i < companyList.value.length; i++) {
+                            idController.text ==
+                                    companyList.value[i].id.toString()
+                                ? companyController.text =
+                                    companyList.value.elementAt(i).name
+                                : '';
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          constraints: BoxConstraints(maxWidth: 80),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    IconButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        dialogList(length);
-                      },
-                      icon: const Icon(Icons.search),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          dialogList(length);
+                        },
+                        icon: const Icon(
+                          Icons.search,
+                          size: 32,
+                        ),
+                      ),
                     ),
                     TextField(
                       onTap: () {
@@ -91,7 +102,7 @@ class HomePage extends StatelessWidget {
                       },
                       controller: companyController,
                       decoration: const InputDecoration(
-                        constraints: BoxConstraints(maxWidth: 270),
+                        constraints: BoxConstraints(maxWidth: 245),
                         label: Text(
                           'Empresa',
                           style: TextStyle(
@@ -102,13 +113,23 @@ class HomePage extends StatelessWidget {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(
-                            Radius.circular(20),
+                            Radius.circular(10),
                           ),
                         ),
                       ),
                     ),
+                    const Padding(
+                      padding: EdgeInsets.only(right: 12),
+                      child: Text(
+                        '*',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
                   ],
-                )
+                ),
               ],
             ),
             const Center(
@@ -141,18 +162,18 @@ class HomePage extends StatelessWidget {
               child: Obx(
                 () => ListView.builder(
                   shrinkWrap: true,
-                  itemCount: listLength.value != list.value.length
-                      ? list.value.length
+                  itemCount: listLength.value != companyList.value.length
+                      ? companyList.value.length
                       : listLength.value,
                   itemBuilder: (context, index) {
-                    print('OBX: ${listLength.value}');
-                    print('LENGTH: ${list.value.length}');
                     return ListTile(
-                      leading: Text('${list.value[index].id.toString()} -'),
-                      title: Text(list.value[index].name),
+                      leading:
+                          Text('${companyList.value[index].id.toString()} -'),
+                      title: Text(companyList.value[index].name),
                       onTap: () {
-                        idController.text = list.value[index].id.toString();
-                        companyController.text = list.value[index].name;
+                        idController.text =
+                            companyList.value[index].id.toString();
+                        companyController.text = companyList.value[index].name;
                         Get.back();
                       },
                     );
@@ -167,11 +188,11 @@ class HomePage extends StatelessWidget {
   }
 
   void searchInfoModel(dynamic query) {
-    final newList = list.value.where((element) {
+    final newList = companyList.value.where((element) {
       final elementName = element.name.toLowerCase();
       final input = query.toLowerCase();
       return elementName.contains(input);
     }).toList();
-    list.value = newList;
+    companyList.value = newList;
   }
 }
