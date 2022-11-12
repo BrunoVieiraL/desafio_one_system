@@ -1,11 +1,16 @@
-import 'package:desafio_one_system/mock/list_mocks.dart';
+import '../mock/list_mocks.dart';
+import '../model/info_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  final TextEditingController companyController = TextEditingController();
-  final TextEditingController idController = TextEditingController();
+  TextEditingController companyController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
+
+  List<InfoModel> list = ListMocks.companyList;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +60,11 @@ class HomePage extends StatelessWidget {
                     TextField(
                       controller: idController,
                       onChanged: (value) {
-                        var list = ListMocks.companyList;
-
                         for (var i = 0; i < list.length; i++) {
                           idController.text == list[i].id.value.toString()
                               ? companyController.text =
                                   list.elementAt(i).name.value
-                              : 'Erro';
+                              : '';
                         }
                       },
                       decoration: const InputDecoration(
@@ -75,10 +78,15 @@ class HomePage extends StatelessWidget {
                     ),
                     IconButton(
                       padding: EdgeInsets.zero,
-                      onPressed: () {},
+                      onPressed: () {
+                        dialogList(list.length);
+                      },
                       icon: const Icon(Icons.search),
                     ),
                     TextField(
+                      onTap: () {
+                        dialogList(list.length);
+                      },
                       controller: companyController,
                       decoration: const InputDecoration(
                         constraints: BoxConstraints(maxWidth: 270),
@@ -111,5 +119,51 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<dynamic> dialogList(int listLength) {
+    return Get.defaultDialog(
+      title: '',
+      content: SizedBox(
+        height: 400,
+        width: 300,
+        child: Column(
+          children: [
+            TextField(
+              keyboardType: TextInputType.number,
+              controller: searchController,
+              onChanged: searchInfoModel,
+            ),
+            const SizedBox(height: 15),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: listLength,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Text('${list[index].id.value.toString()} -'),
+                    title: Text(list[index].name.value),
+                    onTap: () {
+                      idController.text = list[index].id.value.toString();
+                      companyController.text = list[index].name.value;
+                      Get.back();
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void searchInfoModel(dynamic search) {
+    final newList = list.where((element) {
+      final elementName = element.name.value.toLowerCase();
+      final textfieldInput = search.toLowerCase();
+      return elementName.contains(textfieldInput);
+    }).toList();
+    list = newList;
   }
 }
