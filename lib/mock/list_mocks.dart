@@ -1,7 +1,12 @@
 import 'package:desafio_one_system/model/info_model.dart';
+import 'package:get/get.dart';
 
 class ListMocks {
-  static List<InfoModel> companyList = [];
+  static List<InfoModel> companyList = [
+    InfoModel(Rx<int>(1), Rx<String>('Med Matriz')),
+    InfoModel(Rx<int>(2), Rx<String>('Med Recife')),
+    InfoModel(Rx<int>(3), Rx<String>('Med Fortaleza')),
+  ];
 
   static List<InfoModel> partnerList = [];
 
