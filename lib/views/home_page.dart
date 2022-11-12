@@ -10,12 +10,13 @@ class HomePage extends StatelessWidget {
   TextEditingController idController = TextEditingController();
   TextEditingController searchController = TextEditingController();
 
-  List<InfoModel> list = ListMocks.companyList;
+  Rx<List<InfoModel>> list = Rx<List<InfoModel>>([]);
   Rx<int> length = 0.obs;
 
   @override
   Widget build(BuildContext context) {
-    length.value = list.length;
+    list.value = ListMocks.companyList;
+    length.value = list.value.length;
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -62,10 +63,9 @@ class HomePage extends StatelessWidget {
                     TextField(
                       controller: idController,
                       onChanged: (value) {
-                        for (var i = 0; i < list.length; i++) {
-                          idController.text == list[i].id.value.toString()
-                              ? companyController.text =
-                                  list.elementAt(i).name.value
+                        for (var i = 0; i < list.value.length; i++) {
+                          idController.text == list.value[i].id.toString()
+                              ? companyController.text = list.value.elementAt(i).name
                               : '';
                         }
                       },
@@ -141,18 +141,18 @@ class HomePage extends StatelessWidget {
               child: Obx(
                 () => ListView.builder(
                   shrinkWrap: true,
-                  itemCount: listLength.value != list.length
-                      ? list.length
+                  itemCount: listLength.value != list.value.length
+                      ? list.value.length
                       : listLength.value,
                   itemBuilder: (context, index) {
                     print('OBX: ${listLength.value}');
-                    print('LENGTH: ${list.length}');
+                    print('LENGTH: ${list.value.length}');
                     return ListTile(
-                      leading: Text('${list[index].id.value.toString()} -'),
-                      title: Text(list[index].name.value),
+                      leading: Text('${list.value[index].id.toString()} -'),
+                      title: Text(list.value[index].name),
                       onTap: () {
-                        idController.text = list[index].id.value.toString();
-                        companyController.text = list[index].name.value;
+                        idController.text = list.value[index].id.toString();
+                        companyController.text = list.value[index].name;
                         Get.back();
                       },
                     );
@@ -166,13 +166,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void searchInfoModel(dynamic search) {
-    final newList = list.where((element) {
-      final elementName = element.name.value.toLowerCase();
-      final textfieldInput = search.toLowerCase();
-      return elementName.contains(textfieldInput);
+  void searchInfoModel(dynamic query) {
+    final newList = list.value.where((element) {
+      final elementName = element.name.toLowerCase();
+      final input = query.toLowerCase();
+      return elementName.contains(input);
     }).toList();
-    list = newList;
-    Get.forceAppUpdate();
+    list.value = newList;
   }
 }

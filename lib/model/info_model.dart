@@ -1,8 +1,6 @@
-import 'package:get/get.dart';
-
 class InfoModel {
-  Rx<int> id;
-  Rx<String> name;
+  int id;
+  String name;
 
   InfoModel(this.id, this.name);
 }
