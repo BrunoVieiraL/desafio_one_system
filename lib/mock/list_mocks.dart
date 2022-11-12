@@ -1,5 +1,5 @@
-import 'package:desafio_one_system/model/info_model.dart';
 import 'package:get/get.dart';
+import '../model/info_model.dart';
 
 class ListMocks {
   static List<InfoModel> companyList = [
