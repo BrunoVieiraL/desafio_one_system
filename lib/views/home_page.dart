@@ -11,9 +11,11 @@ class HomePage extends StatelessWidget {
   TextEditingController searchController = TextEditingController();
 
   List<InfoModel> list = ListMocks.companyList;
+  Rx<int> length = 0.obs;
 
   @override
   Widget build(BuildContext context) {
+    length.value = list.length;
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -79,13 +81,13 @@ class HomePage extends StatelessWidget {
                     IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        dialogList(list.length);
+                        dialogList(length);
                       },
                       icon: const Icon(Icons.search),
                     ),
                     TextField(
                       onTap: () {
-                        dialogList(list.length);
+                        dialogList(length);
                       },
                       controller: companyController,
                       decoration: const InputDecoration(
@@ -121,7 +123,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<dynamic> dialogList(int listLength) {
+  Future<dynamic> dialogList(Rx<int> listLength) {
     return Get.defaultDialog(
       title: '',
       content: SizedBox(
@@ -136,20 +138,26 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: listLength,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Text('${list[index].id.value.toString()} -'),
-                    title: Text(list[index].name.value),
-                    onTap: () {
-                      idController.text = list[index].id.value.toString();
-                      companyController.text = list[index].name.value;
-                      Get.back();
-                    },
-                  );
-                },
+              child: Obx(
+                () => ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: listLength.value != list.length
+                      ? list.length
+                      : listLength.value,
+                  itemBuilder: (context, index) {
+                    print('OBX: ${listLength.value}');
+                    print('LENGTH: ${list.length}');
+                    return ListTile(
+                      leading: Text('${list[index].id.value.toString()} -'),
+                      title: Text(list[index].name.value),
+                      onTap: () {
+                        idController.text = list[index].id.value.toString();
+                        companyController.text = list[index].name.value;
+                        Get.back();
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -165,5 +173,6 @@ class HomePage extends StatelessWidget {
       return elementName.contains(textfieldInput);
     }).toList();
     list = newList;
+    Get.forceAppUpdate();
   }
 }
