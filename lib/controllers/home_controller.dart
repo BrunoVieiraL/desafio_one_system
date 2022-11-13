@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../models/info_model.dart';
@@ -28,5 +29,18 @@ class HomeController extends GetxController {
           .toList();
     }
     foundCompanies.value = results;
+  }
+
+  void autoComplete(
+    String firstController,
+    TextEditingController secondController,
+  ) {
+    for (var i = 0; i < companyList.length; i++) {
+      firstController == companyList[i].id.toString()
+          ? secondController.text = companyList[i].name
+          : firstController.isEmpty
+              ? secondController.clear()
+              : '';
+    }
   }
 }

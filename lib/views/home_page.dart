@@ -63,17 +63,7 @@ class HomePage extends StatelessWidget {
                       child: TextField(
                         controller: idController,
                         onChanged: (value) {
-                          for (var i = 0;
-                              i < controller.companyList.length;
-                              i++) {
-                            idController.text ==
-                                    controller.companyList[i].id.toString()
-                                ? companyController.text =
-                                    controller.companyList[i].name
-                                : idController.text.isEmpty
-                                    ? companyController.clear()
-                                    : '';
-                          }
+                          controller.autoComplete(value, companyController);
                         },
                         decoration: const InputDecoration(
                           constraints: BoxConstraints(maxWidth: 80),
@@ -148,7 +138,8 @@ class HomePage extends StatelessWidget {
 
   Future<dynamic> dialogList() {
     return Get.defaultDialog(
-      title: '',
+      title: ''.trim(),
+      titlePadding: EdgeInsets.zero,
       content: SizedBox(
         height: 400,
         width: 300,
