@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../models/info_model.dart';
 
-class HomeController extends GetxController {
+class CompanyController extends GetxController {
   final List<InfoModel> companyList = [
     InfoModel(1, 'Med Matriz'),
     InfoModel(2, 'Med Recife'),
