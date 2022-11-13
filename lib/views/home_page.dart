@@ -70,7 +70,9 @@ class HomePage extends StatelessWidget {
                                     companyList.value[i].id.toString()
                                 ? companyController.text =
                                     companyList.value.elementAt(i).name
-                                : '';
+                                : idController.text.isEmpty
+                                    ? companyController.clear()
+                                    : '';
                           }
                         },
                         decoration: const InputDecoration(
