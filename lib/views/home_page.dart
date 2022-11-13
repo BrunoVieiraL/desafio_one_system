@@ -1,5 +1,5 @@
-import '../mock/list_mocks.dart';
-import '../models/info_model.dart';
+import 'package:desafio_one_system/controllers/home_controller.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,12 +10,10 @@ class HomePage extends StatelessWidget {
   TextEditingController companyController = TextEditingController();
   TextEditingController idController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  Rx<List<InfoModel>> companyList = Rx<List<InfoModel>>(ListMocks.companyList);
-  Rx<int> length = Rx<int>(0);
+  final controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
-    length.value = companyList.value.length;
     return DefaultTabController(
       length: 3,
       initialIndex: 0,
@@ -65,11 +63,13 @@ class HomePage extends StatelessWidget {
                       child: TextField(
                         controller: idController,
                         onChanged: (value) {
-                          for (var i = 0; i < companyList.value.length; i++) {
+                          for (var i = 0;
+                              i < controller.companyList.length;
+                              i++) {
                             idController.text ==
-                                    companyList.value[i].id.toString()
+                                    controller.companyList[i].id.toString()
                                 ? companyController.text =
-                                    companyList.value.elementAt(i).name
+                                    controller.companyList[i].name
                                 : idController.text.isEmpty
                                     ? companyController.clear()
                                     : '';
@@ -90,7 +90,7 @@ class HomePage extends StatelessWidget {
                       child: IconButton(
                         padding: EdgeInsets.zero,
                         onPressed: () {
-                          dialogList(length);
+                          dialogList();
                         },
                         icon: const Icon(
                           Icons.search,
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
                     ),
                     TextField(
                       onTap: () {
-                        dialogList(length);
+                        dialogList();
                       },
                       controller: companyController,
                       decoration: const InputDecoration(
@@ -146,7 +146,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Future<dynamic> dialogList(Rx<int> listLength) {
+  Future<dynamic> dialogList() {
     return Get.defaultDialog(
       title: '',
       content: SizedBox(
@@ -157,25 +157,28 @@ class HomePage extends StatelessWidget {
             TextField(
               keyboardType: TextInputType.number,
               controller: searchController,
-              onChanged: searchInfoModel,
+              onChanged: (value) {
+                return controller.filterList(value);
+              },
             ),
             const SizedBox(height: 15),
             Expanded(
               child: Obx(
                 () => ListView.builder(
                   shrinkWrap: true,
-                  itemCount: listLength.value != companyList.value.length
-                      ? companyList.value.length
-                      : listLength.value,
+                  itemCount: controller.foundCompanies.value.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading:
-                          Text('${companyList.value[index].id.toString()} -'),
-                      title: Text(companyList.value[index].name),
+                      title: Text(
+                          '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
                       onTap: () {
-                        idController.text =
-                            companyList.value[index].id.toString();
-                        companyController.text = companyList.value[index].name;
+                        idController.text = controller
+                            .foundCompanies.value[index].id
+                            .toString();
+                        companyController.text =
+                            controller.foundCompanies.value[index].name;
+                        searchController.clear();
+                        controller.onInit();
                         Get.back();
                       },
                     );
@@ -187,14 +190,5 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void searchInfoModel(String query) {
-    final newList = companyList.value.where((element) {
-      final elementName = element.name.toLowerCase();
-      final input = query.toLowerCase();
-      return elementName.contains(input);
-    }).toList();
-    companyList.value = newList;
   }
 }
