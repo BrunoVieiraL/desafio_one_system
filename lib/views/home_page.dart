@@ -8,8 +8,8 @@ import 'widgets/double_textfield_row_custom_widget.dart';
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
-  TextEditingController companyController = TextEditingController();
-  TextEditingController idController = TextEditingController();
+  TextEditingController companyIdController = TextEditingController();
+  TextEditingController companyNameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
   final controller = Get.put(CompanyController());
 
@@ -57,8 +57,8 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 DoubleTextFieldRowCustomWidget(
-                    firstController: idController,
-                    secondController: companyController,
+                    firstController: companyIdController,
+                    secondController: companyNameController,
                     searchController: searchController,
                     controller: controller),
               ],

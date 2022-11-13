@@ -25,6 +25,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16),
           child: TextField(
+            keyboardType: TextInputType.number,
             controller: firstController,
             onChanged: (value) {
               controller.autoComplete(value, secondController);
@@ -104,7 +105,6 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                   hintStyle: TextStyle(
                       color: Color(0xFF2B518D), fontWeight: FontWeight.bold),
                 ),
-                keyboardType: TextInputType.number,
                 controller: searchController,
                 onChanged: (value) {
                   return controller.filterList(value);
@@ -117,9 +117,14 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: controller.foundCompanies.value.length,
                     itemBuilder: (context, index) {
+                      var listValue = controller.foundCompanies.value[index];
                       return ListTile(
                         title: Text(
-                            '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
+                          '${listValue.id} - ${listValue.name}',
+                          style: const TextStyle(
+                              color: Color(0xFF2B518D),
+                              fontWeight: FontWeight.bold),
+                        ),
                         onTap: () {
                           controller.tapListTile(
                               index: index,
