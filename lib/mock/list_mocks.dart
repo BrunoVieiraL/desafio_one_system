@@ -1,4 +1,4 @@
-import '../model/info_model.dart';
+import '../models/info_model.dart';
 
 class ListMocks {
   static List<InfoModel> companyList = [

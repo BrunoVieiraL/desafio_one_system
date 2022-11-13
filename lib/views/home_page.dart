@@ -1,5 +1,5 @@
 import '../mock/list_mocks.dart';
-import '../model/info_model.dart';
+import '../models/info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -187,7 +187,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  void searchInfoModel(dynamic query) {
+  void searchInfoModel(String query) {
     final newList = companyList.value.where((element) {
       final elementName = element.name.toLowerCase();
       final input = query.toLowerCase();
