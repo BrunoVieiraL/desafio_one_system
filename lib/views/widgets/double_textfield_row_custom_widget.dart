@@ -44,50 +44,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
           child: IconButton(
             padding: EdgeInsets.zero,
             onPressed: () {
-              Get.defaultDialog(
-                title: ''.trim(),
-                titlePadding: EdgeInsets.zero,
-                content: SizedBox(
-                  height: 400,
-                  width: 300,
-                  child: Column(
-                    children: [
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        controller: searchController,
-                        onChanged: (value) {
-                          return controller.filterList(value);
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      Expanded(
-                        child: Obx(
-                          () => ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.foundCompanies.value.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                    '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
-                                onTap: () {
-                                  firstController.text = controller
-                                      .foundCompanies.value[index].id
-                                      .toString();
-                                  secondController.text = controller
-                                      .foundCompanies.value[index].name;
-                                  searchController.clear();
-                                  controller.onInit();
-                                  Get.back();
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+              dialogList();
             },
             icon: const Icon(
               Icons.search,
@@ -97,48 +54,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
         ),
         TextField(
           onTap: () {
-            Get.defaultDialog(
-              title: ''.trim(),
-              titlePadding: EdgeInsets.zero,
-              content: SizedBox(
-                height: 400,
-                width: 300,
-                child: Column(
-                  children: [
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      controller: searchController,
-                      onChanged: (value) {
-                        return controller.filterList(value);
-                      },
-                    ),
-                    const SizedBox(height: 15),
-                    Expanded(
-                      child: Obx(
-                        () => ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: controller.foundCompanies.value.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                  '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
-                              onTap: () {
-                                controller.tapListTile(
-                                  index: index,
-                                  firstController: firstController,
-                                  secondController: secondController,
-                                  searchController: searchController,
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
+            dialogList();
           },
           controller: secondController,
           decoration: const InputDecoration(
@@ -169,6 +85,57 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  Future<dynamic> dialogList() {
+    return showDialog(
+      context: Get.context!,
+      builder: (context) => Dialog(
+        child: SizedBox(
+          height: 700,
+          width: 400,
+          child: Column(
+            children: [
+              TextField(
+                textAlign: TextAlign.center,
+                decoration: const InputDecoration(
+                  hintText: 'Pesquise pelo código ou descrição',
+                  hintStyle: TextStyle(
+                      color: Color(0xFF2B518D), fontWeight: FontWeight.bold),
+                ),
+                keyboardType: TextInputType.number,
+                controller: searchController,
+                onChanged: (value) {
+                  return controller.filterList(value);
+                },
+              ),
+              const SizedBox(height: 15),
+              Expanded(
+                child: Obx(
+                  () => ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.foundCompanies.value.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                            '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
+                        onTap: () {
+                          controller.tapListTile(
+                              index: index,
+                              firstController: firstController,
+                              secondController: secondController,
+                              searchController: searchController);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
