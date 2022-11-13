@@ -6,15 +6,15 @@ import '../../controllers/company_controller.dart';
 class DoubleTextFieldRowCustomWidget extends StatelessWidget {
   const DoubleTextFieldRowCustomWidget({
     Key? key,
-    required this.idController,
+    required this.firstController,
     required this.controller,
-    required this.listController,
+    required this.secondController,
     required this.searchController,
   }) : super(key: key);
 
-  final TextEditingController idController;
+  final TextEditingController firstController;
   final CompanyController controller;
-  final TextEditingController listController;
+  final TextEditingController secondController;
   final TextEditingController searchController;
 
   @override
@@ -25,9 +25,9 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16),
           child: TextField(
-            controller: idController,
+            controller: firstController,
             onChanged: (value) {
-              controller.autoComplete(value, listController);
+              controller.autoComplete(value, secondController);
             },
             decoration: const InputDecoration(
               constraints: BoxConstraints(maxWidth: 80),
@@ -70,10 +70,10 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                                 title: Text(
                                     '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
                                 onTap: () {
-                                  idController.text = controller
+                                  firstController.text = controller
                                       .foundCompanies.value[index].id
                                       .toString();
-                                  listController.text = controller
+                                  secondController.text = controller
                                       .foundCompanies.value[index].name;
                                   searchController.clear();
                                   controller.onInit();
@@ -125,8 +125,8 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                               onTap: () {
                                 controller.tapListTile(
                                   index: index,
-                                  firstController: idController,
-                                  secondController: listController,
+                                  firstController: firstController,
+                                  secondController: secondController,
                                   searchController: searchController,
                                 );
                               },
@@ -140,7 +140,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
               ),
             );
           },
-          controller: listController,
+          controller: secondController,
           decoration: const InputDecoration(
             constraints: BoxConstraints(maxWidth: 245),
             label: Text(
