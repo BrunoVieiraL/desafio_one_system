@@ -123,14 +123,12 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                               title: Text(
                                   '${controller.foundCompanies.value[index].id} - ${controller.foundCompanies.value[index].name}'),
                               onTap: () {
-                                idController.text = controller
-                                    .foundCompanies.value[index].id
-                                    .toString();
-                                listController.text =
-                                    controller.foundCompanies.value[index].name;
-                                searchController.clear();
-                                controller.onInit();
-                                Get.back();
+                                controller.tapListTile(
+                                  index: index,
+                                  firstController: idController,
+                                  secondController: listController,
+                                  searchController: searchController,
+                                );
                               },
                             );
                           },

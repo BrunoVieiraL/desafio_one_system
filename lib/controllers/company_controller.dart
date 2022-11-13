@@ -43,4 +43,17 @@ class CompanyController extends GetxController {
               : '';
     }
   }
+
+  void tapListTile({
+    required int index,
+    required TextEditingController firstController,
+    required TextEditingController secondController,
+    required TextEditingController searchController,
+  }) {
+    firstController.text = foundCompanies.value[index].id.toString();
+    secondController.text = foundCompanies.value[index].name;
+    searchController.clear();
+    onInit();
+    Get.back();
+  }
 }
