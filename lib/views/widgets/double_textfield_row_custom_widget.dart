@@ -33,7 +33,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
               controller.autoComplete(value, secondController);
             },
             decoration: const InputDecoration(
-              constraints: BoxConstraints(maxWidth: 80),
+              constraints: BoxConstraints(maxWidth: 80, maxHeight: 45),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10),
@@ -61,7 +61,7 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
           },
           controller: secondController,
           decoration: InputDecoration(
-            constraints: const BoxConstraints(maxWidth: 245),
+            constraints: const BoxConstraints(maxWidth: 245,  maxHeight: 45),
             label: Text(
               floatingLabelText,
               style: const TextStyle(
