@@ -2,32 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/info_model.dart';
-import '../controllers/generic_controller.dart';
+import '/controllers/generic_controller.dart';
 
-class CompanyController extends GenericController {
-  final List<InfoModel> companyList = [
-    InfoModel(1, 'Med Matriz'),
-    InfoModel(2, 'Med Recife'),
-    InfoModel(3, 'Med Fortaleza'),
+class ProcedureController extends GenericController {
+  final List<InfoModel> procedureList = [
+    InfoModel(1, 'Demais'),
+    InfoModel(2, 'Marcapsso'),
+    InfoModel(3, 'Outro'),
   ];
 
   @override
   void onInit() {
     super.onInit();
-    foundCompanies.value = companyList;
+    foundCompanies.value = procedureList;
   }
 
   @override
   void filterList(String companyname) {
     List<InfoModel> results = [];
     if (companyname.isEmpty) {
-      results = companyList;
+      results = procedureList;
     } else if (int.tryParse(companyname) != null) {
-      results = companyList
+      results = procedureList
           .where((element) => element.id == int.parse(companyname))
           .toList();
     } else {
-      results = companyList
+      results = procedureList
           .where((element) =>
               element.name.toLowerCase().contains(companyname.toLowerCase()))
           .toList();
@@ -40,9 +40,9 @@ class CompanyController extends GenericController {
     String firstController,
     TextEditingController secondController,
   ) {
-    for (var i = 0; i < companyList.length; i++) {
-      firstController == companyList[i].id.toString()
-          ? secondController.text = companyList[i].name
+    for (var i = 0; i < procedureList.length; i++) {
+      firstController == procedureList[i].id.toString()
+          ? secondController.text = procedureList[i].name
           : firstController.isEmpty
               ? secondController.clear()
               : '';
