@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/info_model.dart';
@@ -22,6 +22,11 @@ class CompanyController extends GetxController {
     List<InfoModel> results = [];
     if (companyname.isEmpty) {
       results = companyList;
+    } else if (int.tryParse(companyname) != null) {
+      results = companyList
+          .where((element) =>
+              element.id == int.parse(companyname))
+          .toList();
     } else {
       results = companyList
           .where((element) =>
