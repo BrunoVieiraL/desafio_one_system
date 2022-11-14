@@ -1,3 +1,5 @@
+import 'package:desafio_one_system/controllers/partner_controller.dart';
+import 'package:desafio_one_system/controllers/procedure_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +12,14 @@ class HomePage extends StatelessWidget {
 
   TextEditingController companyIdController = TextEditingController();
   TextEditingController companyNameController = TextEditingController();
+  TextEditingController partnerIdController = TextEditingController();
+  TextEditingController partnerNameController = TextEditingController();
+  TextEditingController procedureIdController = TextEditingController();
+  TextEditingController procedureNameController = TextEditingController();
   TextEditingController searchController = TextEditingController();
-  final controller = Get.put(CompanyController());
+  final controllerCompany = Get.put(CompanyController());
+  final controllerPartner = Get.put(PartnerController());
+  final controllerProcedure = Get.put(ProcedureController());
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +65,28 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 DoubleTextFieldRowCustomWidget(
-                    firstController: companyIdController,
-                    secondController: companyNameController,
-                    searchController: searchController,
-                    controller: controller),
+                  firstController: companyIdController,
+                  secondController: companyNameController,
+                  searchController: searchController,
+                  controller: controllerCompany,
+                  floatingLabelText: 'Empresa',
+                ),
+                const SizedBox(height: 10),
+                DoubleTextFieldRowCustomWidget(
+                  firstController: partnerIdController,
+                  secondController: partnerNameController,
+                  searchController: searchController,
+                  controller: controllerPartner,
+                  floatingLabelText: 'Parceiro',
+                ),
+                const SizedBox(height: 10),
+                DoubleTextFieldRowCustomWidget(
+                  firstController: procedureIdController,
+                  controller: controllerProcedure,
+                  secondController: procedureNameController,
+                  searchController: searchController,
+                  floatingLabelText: 'Linha do Procedimento',
+                ),
               ],
             ),
             const Center(

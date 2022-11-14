@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../controllers/company_controller.dart';
+import '../../controllers/generic_controller.dart';
 
 class DoubleTextFieldRowCustomWidget extends StatelessWidget {
   const DoubleTextFieldRowCustomWidget({
@@ -10,12 +10,14 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
     required this.controller,
     required this.secondController,
     required this.searchController,
+    required this.floatingLabelText,
   }) : super(key: key);
 
   final TextEditingController firstController;
-  final CompanyController controller;
+  final GenericController controller;
   final TextEditingController secondController;
   final TextEditingController searchController;
+  final String floatingLabelText;
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +60,17 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
             dialogList();
           },
           controller: secondController,
-          decoration: const InputDecoration(
-            constraints: BoxConstraints(maxWidth: 245),
+          decoration: InputDecoration(
+            constraints: const BoxConstraints(maxWidth: 245),
             label: Text(
-              'Empresa',
-              style: TextStyle(
+              floatingLabelText,
+              style: const TextStyle(
                   color: Color(0xFF2B518D),
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
             ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            border: OutlineInputBorder(
+            border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10),
               ),
@@ -107,7 +109,9 @@ class DoubleTextFieldRowCustomWidget extends StatelessWidget {
                 ),
                 controller: searchController,
                 onChanged: (value) {
-                  return controller.filterList(value);
+                  return controller.filterList(
+                    value,
+                  );
                 },
               ),
               const SizedBox(height: 15),
